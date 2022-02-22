@@ -85,8 +85,15 @@ func translate(text, from, to string, withVerification bool, tries int, delay ti
 	u.RawQuery = parameters.Encode()
 
 	var r *http.Response
+	var tr = http.Transport{
+		TLSHandshakeTimeout:   5 * time.Second,
+		IdleConnTimeout:       5 * time.Second,
+		ResponseHeaderTimeout: 5 * time.Second,
+		ExpectContinueTimeout: 5 * time.Second,
+	}
 	httpClient := http.Client{
-		Timeout: 5 * time.Second,
+		Timeout:   5 * time.Second,
+		Transport: &tr,
 	}
 
 	for tries > 0 {
