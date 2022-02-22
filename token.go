@@ -128,18 +128,18 @@ func updateTTK(TTK otto.Value) (otto.Value, error) {
 	return TTK, nil
 }
 
-func get(text otto.Value, ttk otto.Value) string {
+func get(text otto.Value, ttk otto.Value) (string, error) {
 	ttk, err := updateTTK(ttk)
 	if err != nil {
-		return ""
+		return "", err
 	}
 
 	tk, err := sM(text, ttk)
 
 	if err != nil {
-		return ""
+		return "", err
 	}
 	sTk := strings.Replace(tk.String(), "&tk=", "", -1)
-	return sTk
+	return sTk, err
 
 }

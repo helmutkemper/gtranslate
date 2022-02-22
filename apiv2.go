@@ -40,11 +40,17 @@ func translate(text, from, to string, withVerification bool, tries int, delay ti
 		}
 	}
 
-	t, _ := otto.ToValue(text)
+	t, err := otto.ToValue(text)
+	if err != nil {
+		return "", err
+	}
 
 	urll := fmt.Sprintf("https://translate.%s/translate_a/single", GoogleHost)
 
-	token := get(t, ttk)
+	token, err := get(t, ttk)
+	if err != nil {
+		return "", err
+	}
 
 	data := map[string]string{
 		"client": "gtx",
@@ -63,7 +69,7 @@ func translate(text, from, to string, withVerification bool, tries int, delay ti
 
 	u, err := url.Parse(urll)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	parameters := url.Values{}
