@@ -79,9 +79,12 @@ func translate(text, from, to string, withVerification bool, tries int, delay ti
 	u.RawQuery = parameters.Encode()
 
 	var r *http.Response
+	httpClient := http.Client{
+		Timeout: 5 * time.Second,
+	}
 
 	for tries > 0 {
-		r, err = http.Get(u.String())
+		r, err = httpClient.Get(u.String())
 		if err != nil {
 			if err == http.ErrHandlerTimeout {
 				return "", errBadNetwork
